@@ -28,8 +28,8 @@ BOARD_KERNEL_PAGESIZE := 2048
 TARGET_KERNEL_SOURCE := kernel/quanta/fg6q
 TARGET_KERNEL_CONFIG := fg6q_defconfig
 
-# Use dlmalloc
-MALLOC_IMPL := dlmalloc
+# Configure jemalloc for low-memory
+MALLOC_SVELTE := true
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
