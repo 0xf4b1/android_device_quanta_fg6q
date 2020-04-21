@@ -91,9 +91,5 @@ BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR ?= device/quanta/fg6q/bluetooth
 BCM_BLUETOOTH_MANTA_BUG := true
 
-# CM Hardware
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS := device/quanta/fg6q/cmhw/
-
 # inherit from the proprietary version
 -include vendor/quanta/fg6q/BoardConfigVendor.mk
