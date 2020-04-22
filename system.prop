@@ -41,3 +41,6 @@ drm.service.enabled=true
 
 # Other
 tf.enable=y
+
+# Use grid layout from Pixel C
+ro.recents.grid=1
