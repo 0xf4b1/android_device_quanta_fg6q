@@ -29,11 +29,6 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
 
-# GPS
-PRODUCT_COPY_FILES += \
-    device/quanta/fg6q/gps/gpsconfig.xml:system/etc/gps/gpsconfig.xml \
-    device/quanta/fg6q/gps/gps.conf:system/etc/gps.conf
-
 # Audio
 PRODUCT_COPY_FILES += \
     device/quanta/fg6q/audio/asound.conf:system/etc/asound.conf \
@@ -61,11 +56,6 @@ PRODUCT_PACKAGES += \
 # Power
 PRODUCT_COPY_FILES += \
     device/quanta/fg6q/power.macallan.rc:system/etc/power.macallan.rc
-
-# Camera
-PRODUCT_COPY_FILES += \
-    device/quanta/fg6q/camera/nvcamera.conf:system/etc/nvcamera.conf \
-    device/quanta/fg6q/camera/model_frontal.xml:system/etc/model_frontal.xml
 
 # Bluetooth
 PRODUCT_COPY_FILES += \
@@ -135,18 +125,8 @@ PRODUCT_PACKAGES += \
 
 # libshims
 PRODUCT_PACKAGES += \
-    libshim_camera \
     libshim_nvaudio \
-    libgps
-
-# Closed Source Modules
-PRODUCT_COPY_FILES += \
-    device/quanta/fg6q/prebuilts/camera.tegra.so:system/lib/hw/camera.tegra.so \
-    device/quanta/fg6q/prebuilts/libnvmm_camera.so:system/vendor/lib/libnvmm_camera.so \
-    device/quanta/fg6q/prebuilts/libnvodm_imager.so:system/vendor/lib/libnvodm_imager.so \
-    device/quanta/fg6q/prebuilts/libnvodm_query.so:system/vendor/lib/libnvodm_query.so \
-    device/quanta/fg6q/prebuilts/gps.tegra.so:system/lib/hw/gps.tegra.so \
-    device/quanta/fg6q/prebuilts/glgps_nvidiaTegra2android:system/bin/glgps_nvidiaTegra2android
+    libshim_sensors
 
 PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_AAPT_CONFIG := xlarge hdpi xhdpi
