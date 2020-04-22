@@ -7,7 +7,6 @@ Copyright (c) 2011-2013 NVIDIA Corporation.  All Rights Reserved.
 #is strictly prohibited.
 
 import init.macallan.usb.rc
-#import init.${ro.boot.modem}_macallan.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -209,27 +208,11 @@ on boot
     write /sys/power/edp/battery/imx091/notify 1
     write /sys/power/edp/battery/speaker/notify 1
 
-# set hwui properties depending on the screen resolution and the memory size
-service set_hwui_params /system/bin/set_hwui_params.sh
-    class main
-    user root
-    group root
-    oneshot
-
-# CPU Boost: boost CPU on input events
-service input-cfboost /system/bin/input_cfboost_init.sh
-    class main
-    user root
-    group root
-    oneshot
-
 on charger
     write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/enable 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor conservative
     write /sys/class/input/input0/enabled 1
     write /sys/class/input/input0/enabled 0
-    start chargerservice
-#    class_start charger
 
 on property:ro.debuggable=1
     # Invensense interface
@@ -302,145 +285,14 @@ on property:ro.debuggable=1
     chown root audio /sys/class/i2c-dev/i2c-0/device/0-003e/aec_enable
     chmod 0660 /sys/class/i2c-dev/i2c-0/device/0-003e/aec_enable
 
-service dhcpcd_wlan0 /system/bin/dhcpcd -aABKL
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_p2p /system/bin/dhcpcd -aABKL
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_eth0 /system/bin/dhcpcd -ABKL -f/system/etc/dhcpcd/dhcpcd.conf
-     class main
-     disabled
-     oneshot
-
-service dhcpcd_bnep0 /system/bin/dhcpcd -ABKL
-    class main
-    disabled
-    oneshot
-
-service iprenew_wlan0 /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
-service iprenew_p2p /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
-service iprenew_eth0 /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
-# create virtual SD card at /mnt/sdcard, based on the /data/media directory
-# deamon will drop to user/group system/media_rw after initializing
-# underlying files in /data/media wil be created with user and group media_rw (1023)
-
-service hostapd_bin  /system/bin/hostapd -dd /data/misc/wifi/hostapd.conf
-    socket wpa_wlan1 dgram 660 wifi wifi
-    disabled
-    oneshot
-
-# bugreport is triggered by the VOLUME-DOWN and VOLUME-UP keys
-service bugreport /system/bin/dumpstate -d -v -o /data/storage/bugreports/bugreport
-    class main
-    disabled
-    oneshot
-    keycodes 115 114
-
-# btmacwriter - to create unique BD address
-service btmacwriter /system/bin/btmacwriter
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin
-    oneshot
-
-# Start GPS daemon
-on boot
-    service gps-daemon /system/bin/glgps_nvidiaTegra2android -c /system/etc/gps/gpsconfig.xml
-    user gps
-    socket gps seqpacket 0660 gps system
-    group system inet sdcard_rw sdcard_r
-    class late_start
-
 on property:init.svc.hciattach=stopped
     write /sys/devices/platform/reg-userspace-consumer.1/state disabled
 
 # Prepare TF service
 import init.tf.rc
 
-# Enable NvCpuD, and set it to never poll config again
-on boot
-    setprop nvcpud.enabled true
-    setprop nvcpud.config_refresh_ms -1
-
-service nvcpud /system/bin/nvcpud
-    class main
-    user system
-    group system
-    oneshot
-
-# Enable PowerService
-#    service powerservice /system/bin/powerservice
-#    class main
-#    user system
-#    group system
-
-#Modem
-#service ril-daemon /system/bin/rild -l libhuawei-ril.so
-#    class main
-#    socket rild stream 660 root radio
-#    socket rild-debug stream 660 radio system
-#    user root
-#    group radio cache inet misc audio sdcard_rw
-
-# create filesystems if necessary
-service setup_fs /system/bin/setup_fs \
-        /dev/block/platform/sdhci-tegra.3/by-name/UDA \
-        /dev/block/platform/sdhci-tegra.3/by-name/CAC
-    class core
-    user root
-    group root
-    oneshot
-
-# unified scaling setup
-service ussr_setup /system/bin/ussr_setup.sh
-    class main
-    user root
-    group root
-    oneshot
-
-# unified scaling process
-service ussrd /system/bin/ussrd
-    user system
-    group system
-    class main
-
-# unified scaling watchdog process
-service usdwatchdog /system/bin/usdwatchdog --wait 30
-    user system
-    group system
-    class main
-
-# start pbc daemon
-service pbc /system/bin/pbc
-    class main
-    user root
-    group root
-
-# Second boot and onwards
-on property:ril.testmode=1
-    stop ril-daemon
-    start ril-daemon-test
-
-on property:ril.testmode=0
-    stop ril-daemon-test
-    start ril-daemon
+service charger /charger
+    class charger
 
 service p2p_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf \
@@ -473,93 +325,9 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-# wifiloader - set the wifi commchip_id accordingly
-service wifiloader /system/bin/wifi_loader.sh
-    class main
-    user root
-    group root
-    oneshot
-
-service supl20clientd /system/bin/supl20clientd
-    class main
-
-service bdt /system/bin/logwrapper /system/bin/bdt -p
-    class main
-    user root
-    group root
-    disabled
-    oneshot
-
-# Customers should remove this line
-# import init.qvs.rc
-
-on property:wifi.test_mode=1
-    rm /data/misc/wifi/firmware/fw_bcmdhd.bin
-    symlink /data/misc/wifi/firmware/fw_bcmdhd_mfg.bin /data/misc/wifi/firmware/fw_bcmdhd.bin
-
-on property:wifi.test_mode=0
-    rm /data/misc/wifi/firmware/fw_bcmdhd.bin
-    symlink /data/misc/wifi/firmware/fw_bcmdhd_non_mfg.bin /data/misc/wifi/firmware/fw_bcmdhd.bin
-
-#service sv_bootaudio /system/bin/bootaudio
-#    user system
-#    disabled
-#    oneshot
-
-#on property:init.svc.bootanim=running
-#    start sv_bootaudio
-#	start touch_fw_update
-
-# PP3N DNP
-import init.dnp.rc
-
-# for checking eks.dat is wrapped with correct SBK, default value
-setprop eks.eksstatus 0
-
 # for touch enable
 on property:sys.boot_completed=1
 	write /sys/bus/i2c/devices/1-0038/enable 1
-
-# for touch upgrade
-#service touch_fw_update /system/bin/touch_fw_upgrade
-#    user root
-#    oneshot
-
-# various model/sku specific init.rc
-#import init.model_specific.rc
-
-#+++ [QuantaMTP:Eria] Start
-on property:persist.sys.quanta-mtp.enable=1
-    start mtpserver
-
-on property:persist.sys.quanta-mtp.enable=0
-    stop mtpserver
-
-service mtpserver /system/bin/mtpserver
-    class main
-    user root
-    disabled
-
-service chargerservice /charger
-#    class charger
-
-#+++ [QuantaMTP:Eria] Stop
-
-# Performance profiles
-service nv_power /system/bin/power_mode.sh
-    user system
-    group system
-    oneshot
-    disabled
-
-on property:persist.sys.power_profile=0
-    start nv_power
-
-on property:persist.sys.power_profile=1
-    start nv_power
-
-on property:persist.sys.power_profile=2
-    start nv_power
 
 # Set up HDCP
     import init.hdcp.rc
