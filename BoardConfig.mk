@@ -22,11 +22,9 @@ BOARD_KERNEL_CMDLINE := androidboot.selinux=disabled androidboot.hardware=macall
 BOARD_KERNEL_BASE := 0x10000000
 BOARD_KERNEL_PAGESIZE := 2048
 
-#TARGET_PREBUILT_KERNEL := device/quanta/fg6q/kernel
-
-#Try to build the kernel
 TARGET_KERNEL_SOURCE := kernel/quanta/fg6q
 TARGET_KERNEL_CONFIG := fg6q_defconfig
+KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.7/bin
 
 # Configure jemalloc for low-memory
 MALLOC_SVELTE := true
