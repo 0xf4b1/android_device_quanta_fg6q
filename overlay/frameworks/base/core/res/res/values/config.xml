@@ -26,7 +26,7 @@
     <bool name="config_showNavigationBar">true</bool>
 
     <!-- The default iface on which to monitor data use -->
-    <string name="config_datause_iface" translatable="false">rndis0</string>
+    <string name="config_datause_iface" translatable="false">wlan0</string>
 
     <!-- This string array should be overridden by the device to present a list of network
          attributes.  This is used by the connectivity manager to decide which networks can coexist
@@ -96,20 +96,6 @@
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">true</bool>
 
-    <!-- Screen brightness used to dim the screen while dozing in a very low power state.
-         May be less than the minimum allowed brightness setting
-         that can be set by the user. -->
-    <integer name="config_screenBrightnessDoze">3</integer>
-
-    <!-- Minimum allowable screen brightness to use in a very dark room.
-         This value sets the floor for the darkest possible auto-brightness
-         adjustment.  It is expected to be somewhat less than the first entry in
-         config_autoBrightnessLcdBacklightValues so as to allow the user to have
-         some range of adjustment to dim the screen further than usual in very
-         dark rooms. The contents of the screen must still be clearly visible
-         in darkness (although they may not be visible in a bright room). -->
-    <integer name="config_screenBrightnessDark">3</integer>
-
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N + 1 control points as follows:
          (1-based arrays)
@@ -131,22 +117,11 @@
 
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>50</item>
-        <item>120</item>
-        <item>220</item>
-        <item>450</item>
-        <item>700</item>
-        <item>900</item>
-        <item>1400</item>
-        <item>2000</item>
-        <item>3000</item>
-        <item>4000</item>
-        <item>5000</item>
-        <item>7000</item>
-        <item>10000</item>
-        <item>12500</item>
-        <item>15000</item>
-        <item>18000</item>
+        <item>10</item>
+        <item>160</item>
+        <item>320</item>
+        <item>640</item>
+        <item>1280</item>
     </integer-array>
 
     <!-- Array of output values for LCD backlight corresponding to the LUX values
@@ -155,23 +130,12 @@
          The brightness values must be between 0 and 255 and be non-decreasing.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>15</item>
         <item>30</item>
-        <item>45</item>
-        <item>60</item>
-        <item>75</item>
-        <item>90</item>
         <item>100</item>
-        <item>115</item>
         <item>130</item>
-        <item>145</item>
-        <item>160</item>
-        <item>175</item>
-        <item>190</item>
-        <item>205</item>
-        <item>220</item>
-        <item>235</item>
-        <item>255</item>
+        <item>170</item>
+        <item>200</item>
+        <item>250</item>
     </integer-array>
 
     <!-- Array of output values for button backlight corresponding to the LUX values
@@ -180,17 +144,6 @@
          The brightness values must be between 0 and 255 and be non-decreasing.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessButtonBacklightValues">
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
@@ -211,59 +164,8 @@
         <item>0</item>
         <item>0</item>
         <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
     </integer-array>
 
     <!-- Indicate whether the SD card is accessible without removing the battery. -->
     <bool name="config_batterySdCardAccessibility">true</bool>
-
-    <!--  Maximum number of supported users -->
-    <integer name="config_multiuserMaximumUsers">5</integer>
-
-    <!-- Whether UI for multi user should be shown -->
-    <bool name="config_enableMultiUserUI">true</bool>
-
-    <!-- Performance profiles -->
-    <!--string name="config_perf_profile_prop">persist.sys.power_profile</string>
-    <string name="config_perf_profile_default_entry">2</string-->
-
-    <!-- Whether WiFi display is supported by this device.
-         There are many prerequisites for this feature to work correctly.
-         Here are a few of them:
-         * The WiFi radio must support WiFi P2P.
-         * The WiFi radio must support concurrent connections to the WiFi display and
-           to an access point.
-         * The Audio Flinger audio_policy.conf file must specify a rule for the "r_submix"
-           remote submix module.  This module is used to record and stream system
-           audio output to the WiFi display encoder in the media server.
-         * The remote submix module "audio.r_submix.default" must be installed on the device.
-         * The device must be provisioned with HDCP keys (for protected content).
-    -->
-    <bool name="config_enableWifiDisplay">true</bool>
-
-    <!-- Set to true if the wifi display supports compositing content stored
-         in gralloc protected buffers.  For this to be true, there must exist
-         a protected hardware path for surface flinger to composite and send
-         protected buffers to the wifi display video encoder.
-         If this flag is false, we advise applications not to use protected
-         buffers (if possible) when presenting content to a wifi display because
-         the content may be blanked.
-         This flag controls whether the {@link Display#FLAG_SUPPORTS_PROTECTED_BUFFERS}
-         flag is set for wifi displays.
-    -->
-    <bool name="config_wifiDisplaySupportsProtectedBuffers">true</bool>
-
-    <!-- Older rotation sensors are not setting event.timestamp correctly. Setting to
-    true will use SystemClock.elapsedRealtimeNanos() to set timestamp. -->
-    <bool name="config_useSystemClockforRotationSensor">true</bool>
 </resources>
