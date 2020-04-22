@@ -8,7 +8,7 @@ ro.sf.lcd_density=320
 ro.zygote.disable_gl_preload=true
 
 # use glcomposer as the default compositor
-persist.tegra.compositor=glcomposer
+persist.tegra.compositor=surfaceflinger
 
 # disable EGL_BUFFER_PRESERVED extension for OpenGLRenderer
 debug.hwui.render_dirty_regions=false
